@@ -16,7 +16,6 @@ public class Renderer {
 
     private final ArrayList<Mesh> renderQueue = new ArrayList<>();
     private final long window;
-    public static final Matrix4 projectionMatrix = Matrix4.perspective(70, 800.0 / 600.0, 0.01, 100.0);
     public static final Camera camera = new Camera();
 
     public Renderer(long window) {

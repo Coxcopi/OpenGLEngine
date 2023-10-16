@@ -74,8 +74,9 @@ public class ShaderParser {
                     }
                 }
             }
-            int programID = createShaderProgram(vertexSource, fragmentSource);
-            return new Shader(vertexSource, fragmentSource, programID);
+            final int programID = createShaderProgram(vertexSource, fragmentSource);
+            final ShaderProgramSource source = new ShaderProgramSource(vertexSource, fragmentSource);
+            return new Shader(source, programID);
         } catch (IOException e) {
             System.out.println("Error loading shader file at " + path + ":");
             e.printStackTrace();

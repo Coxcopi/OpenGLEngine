@@ -4,18 +4,11 @@ import de.coxcopi.util.math.Matrix4;
 import org.lwjgl.opengl.GL20;
 
 public class Shader {
-    final String vertexSource;
-    final String fragmentSource;
+    final ShaderProgramSource source;
     final int programID;
-    public enum DefaultMatrixUniform {
-        MODEL_MATRIX,
-        VIEW_MATRIX,
-        PROJECTION_MATRIX
-    }
 
-    public Shader(String vertexSource, String fragmentSource, int programID) {
-        this.vertexSource = vertexSource;
-        this.fragmentSource = fragmentSource;
+    public Shader(ShaderProgramSource source, int programID) {
+        this.source = source;
         this.programID = programID;
     }
 
@@ -25,30 +18,31 @@ public class Shader {
         GL20.glUniformMatrix4fv(3, false, projectionMatrix.toUniformFloatArray());
     }
 
-    public void setDefaultMatrixUniform(DefaultMatrixUniform type, Matrix4 value, boolean transpose) {
-        final int location = (type == DefaultMatrixUniform.MODEL_MATRIX ? 1 : (type == DefaultMatrixUniform.VIEW_MATRIX ? 2 : 3));
-        GL20.glUniformMatrix4fv(location, transpose, value.toUniformFloatArray());
-    }
-
     public void setUniform(String uniform, double value) {
         setUniform(uniform, (float) value);
     }
 
     public void setUniform(String uniform, float value) {
         final int location = getUniformLocation(uniform);
-        if (location == -1) {return;}
+        if (location == -1) {
+            return;
+        }
         GL20.glUniform1f(location, value);
     }
 
     public void setUniform(String uniform, int value) {
         final int location = getUniformLocation(uniform);
-        if (location == -1) {return;}
+        if (location == -1) {
+            return;
+        }
         GL20.glUniform1i(location, value);
     }
 
     public void setUniform(String uniform, Matrix4 value, boolean transpose) {
         final int location = getUniformLocation(uniform);
-        if (location == -1) {return;}
+        if (location == -1) {
+            return;
+        }
         GL20.glUniformMatrix4fv(location, transpose, value.toUniformFloatArray());
     }
 

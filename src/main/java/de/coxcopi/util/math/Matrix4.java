@@ -1,5 +1,7 @@
 package de.coxcopi.util.math;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * 4x4 Matrix used for perspective rendering and transformation.
  * The matrix is defined as using a row-major order.
@@ -25,7 +27,7 @@ public class Matrix4 {
      * duplicating matrices. Returns an exact copy.
      * @param matrix The copied matrix.
      */
-    public Matrix4(Matrix4 matrix) {
+    public Matrix4(@NotNull Matrix4 matrix) {
         for (int x = 0; x < 4; x++) {
             for (int y = 0; y < 4; y++) {
                 this.matrix[x][y] = matrix.getValue(x, y);
@@ -37,7 +39,7 @@ public class Matrix4 {
      * Translates (offsets / moves) the transformation matrix's origin.
      * @param vector Vector by which to translate the matrix.
      */
-    public void translate(Vector3 vector) {
+    public void translate(@NotNull Vector3 vector) {
         matrix[3][0] = matrix[3][0] + vector.x;
         matrix[3][1] = matrix[3][1] + vector.y;
         matrix[3][2] = matrix[3][2] + vector.z;
@@ -48,7 +50,7 @@ public class Matrix4 {
      * @param vector Vector by which to translate the matrix.
      * @return The translated matrix.
      */
-    public Matrix4 translated(Vector3 vector) {
+    public Matrix4 translated(@NotNull Vector3 vector) {
         Matrix4 matrix = new Matrix4(this);
         matrix.translate(vector);
         return matrix;
@@ -58,7 +60,7 @@ public class Matrix4 {
      * Scales the transformation matrix.
      * @param vector Vector by which to multiply the matrix's scale.
      */
-    public void scale(Vector3 vector) {
+    public void scale(@NotNull Vector3 vector) {
         matrix[0][0] *= vector.x;
         matrix[1][1] *= vector.y;
         matrix[2][2] *= vector.z;
@@ -79,7 +81,7 @@ public class Matrix4 {
      * @param vector Vector by which to multiply the matrix's scale.
      * @return The scaled matrix.
      */
-    public Matrix4 scaled(Vector3 vector) {
+    public Matrix4 scaled(@NotNull Vector3 vector) {
         Matrix4 matrix = new Matrix4(this);
         matrix.scale(vector);
         return matrix;
@@ -102,7 +104,7 @@ public class Matrix4 {
      * order in which two matrices are multiplied affects the result.
      * @param matrix The matrix which to multiply with.
      */
-    public void multiply(Matrix4 matrix) {
+    public void multiply(@NotNull Matrix4 matrix) {
         Matrix4 matrixCopy = new Matrix4(this);
         fill(0);
         for (int row = 0; row < 4; row++) {
@@ -121,7 +123,7 @@ public class Matrix4 {
      * @param matrix The matrix which to multiply with.
      * @return The multiplied matrix.
      */
-    public Matrix4 multiplied(Matrix4 matrix) {
+    public Matrix4 multiplied(@NotNull Matrix4 matrix) {
         Matrix4 matrixMultiplied = new Matrix4(this);
         matrixMultiplied.multiply(matrix);
         return matrixMultiplied;
@@ -219,7 +221,7 @@ public class Matrix4 {
      * @see <a href="https://github.com/g-truc/glm/blob/master/glm/ext/matrix_transform.inl">glm implementation</a>.
      * @return A view matrix.
      */
-    public static Matrix4 lookAt(Vector3 eye, Vector3 center, Vector3 up) {
+    public static Matrix4 lookAt(@NotNull Vector3 eye, @NotNull Vector3 center, @NotNull Vector3 up) {
         Vector3 f = center.translated(eye.inverted()).normalized();
         Vector3 s = f.cross(up).normalized();
         Vector3 u = s.cross(f);
@@ -406,44 +408,28 @@ public class Matrix4 {
         return new Vector3(matrix[3][0], matrix[3][1], matrix[3][2]);
     }
 
-    public void setX(Vector3 vector) {
+    public void setX(@NotNull Vector3 vector) {
         matrix[0][0] = vector.x;
         matrix[0][1] = vector.y;
         matrix[0][2] = vector.z;
     }
 
-    public void setY(Vector3 vector) {
+    public void setY(@NotNull Vector3 vector) {
         matrix[1][0] = vector.x;
         matrix[1][1] = vector.y;
         matrix[1][2] = vector.z;
     }
 
-    public void setZ(Vector3 vector) {
+    public void setZ(@NotNull Vector3 vector) {
         matrix[2][0] = vector.x;
         matrix[2][1] = vector.y;
         matrix[2][2] = vector.z;
     }
 
-    public void setOrigin(Vector3 vector) {
+    public void setOrigin(@NotNull Vector3 vector) {
         matrix[3][0] = vector.x;
         matrix[3][1] = vector.y;
         matrix[3][2] = vector.z;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("-----------------------\n");
-        for (int y = 0; y < 4; y++) {
-            for (int x = 0; x < 4; x++) {
-                stringBuilder.append(matrix[x][y]);
-                stringBuilder.append("\t");
-            }
-            if (y < 3) {
-                stringBuilder.append("\n");
-            }
-        }
-        return stringBuilder.toString();
     }
 
     /**
@@ -474,5 +460,21 @@ public class Matrix4 {
                 matrix[x][y] = value;
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("-----------------------\n");
+        for (int y = 0; y < 4; y++) {
+            for (int x = 0; x < 4; x++) {
+                stringBuilder.append(matrix[x][y]);
+                stringBuilder.append("\t");
+            }
+            if (y < 3) {
+                stringBuilder.append("\n");
+            }
+        }
+        return stringBuilder.toString();
     }
 }

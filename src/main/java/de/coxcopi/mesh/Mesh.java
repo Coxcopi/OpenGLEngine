@@ -23,7 +23,7 @@ public class Mesh {
 
     public void render() {
         material.bind();
-        material.shader.setDefaultMatrixUniforms(transform, Renderer.camera.viewMatrix, Renderer.projectionMatrix);
+        material.shader.setDefaultMatrixUniforms(transform, Renderer.camera.viewMatrix, Renderer.camera.projectionMatrix);
         GL30.glBindVertexArray(vao);
     }
 }
