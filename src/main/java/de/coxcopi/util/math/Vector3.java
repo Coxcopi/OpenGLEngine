@@ -63,6 +63,20 @@ public class Vector3 {
         this.z = a;
     }
 
+    public static Vector3 sphericalToCartesian(double radius, double theta, double phi) {
+        final double x = radius * java.lang.Math.cos(theta) * java.lang.Math.cos(phi);
+        final double y = -radius * java.lang.Math.sin(theta) * java.lang.Math.sin(phi);
+        final double z = radius * java.lang.Math.cos(theta);
+        return new Vector3(x, y, z);
+    }
+
+    public static Vector3 cartesianToSpherical(Vector3 point) {
+        final double radius = point.length();
+        final double theta = java.lang.Math.acos(point.y / radius);
+        final double phi = java.lang.Math.atan(-point.z / point.x);
+        return new Vector3(radius, theta, phi);
+    }
+
     /**
      * Calculates the vector's length.
      * @return The length.

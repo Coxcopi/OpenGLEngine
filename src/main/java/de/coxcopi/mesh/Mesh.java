@@ -15,6 +15,7 @@ public class Mesh {
         this.vao = vao;
         this.elements = elements;
         this.transform = Matrix4.transform();
+        this.material = new Material();
     }
 
     public int getElementCount() {

@@ -21,6 +21,7 @@ public class Renderer {
     public Renderer(long window) {
         this.window = window;
         glEnable(GL_DEPTH_TEST);
+        //GL20.glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }
 
     public void addToRenderQueue(Mesh mesh) {
@@ -39,17 +40,17 @@ public class Renderer {
                 continue;
             }
             mesh.transform.rotateX(Math.degToRad(1.1));
-            mesh.transform.rotateY(Math.degToRad(0.8));
-            mesh.transform.rotateZ(Math.degToRad(-1));
+            //mesh.transform.rotateY(Math.degToRad(0.8));
+            //mesh.transform.rotateZ(Math.degToRad(-1));
 
-            double r = 10;
+            double r = 6;
             double camX = java.lang.Math.sin(glfwGetTime()) * r;
             double camZ = java.lang.Math.cos(glfwGetTime()) * r;
 
-            camera.viewMatrix = Matrix4.lookAt(new Vector3(camX, 0, camZ), new Vector3(0), new Vector3(0, 1, 0));
+            //camera.viewMatrix = Matrix4.lookAt(new Vector3(camX, 5, camZ), new Vector3(0), new Vector3(0, 1, 0));
 
             mesh.render();
-            GL20.glDrawElements(GL20.GL_TRIANGLES, mesh.getElementCount(), GL20.GL_UNSIGNED_INT, 0);
+            GL20.glDrawElements(GL_TRIANGLES, mesh.getElementCount(), GL20.GL_UNSIGNED_INT, 0);
 
         }
         glfwSwapBuffers(window);

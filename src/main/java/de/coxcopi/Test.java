@@ -96,18 +96,23 @@ public class Test {
         Renderer renderer = new Renderer(window);
 
         Mesh quad = MeshBuilder.createPrimitiveRect(1f, 1f);
-        quad.transform.translate(new Vector3(3, -2, 0));
+        quad.transform.translate(new Vector3(3, 0, 0));
+        quad.transform.scale(0.7);
 
         Mesh cube = MeshBuilder.createPrimitiveCuboid(1f, 1f, 1f);
         cube.transform.translate(new Vector3(0, 0, 0));
-        cube.transform.scale(0.6);
 
         Material material = new Material();
         quad.material = material;
         cube.material = material;
 
-        renderer.addToRenderQueue(quad);
-        renderer.addToRenderQueue(cube);
+        //renderer.addToRenderQueue(quad);
+        //renderer.addToRenderQueue(cube);
+
+
+
+        Mesh sphere = MeshBuilder.createPrimitiveSphere(8, 5, 1);
+        renderer.addToRenderQueue(sphere);
 
         while (!glfwWindowShouldClose(window)) {
             renderer.renderTick();
