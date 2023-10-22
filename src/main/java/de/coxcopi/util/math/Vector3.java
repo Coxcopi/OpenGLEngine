@@ -278,6 +278,14 @@ public class Vector3 {
         return new Vector3(Math.lerp(x, vector.x, t), Math.lerp(y, vector.y, t), Math.lerp(z, vector.z, t));
     }
 
+    public static Vector3 midpointBetween(@NotNull Vector3 a, @NotNull Vector3 b) {
+        return new Vector3((a.x + b.x) / 2, (a.y + b.y) / 2, (a.z + b.z) / 2);
+    }
+
+    public float[] toFloatArray() {
+        return new float[] {(float) x, (float) y, (float) z};
+    }
+
     @Override
     public String toString() {
         return "Vector3(" + x + ", " + y + ", " + z + ")";
