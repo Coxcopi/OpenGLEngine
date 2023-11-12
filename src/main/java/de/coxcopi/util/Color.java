@@ -33,6 +33,27 @@ public class Color {
         this.a = a;
     }
 
+    public Color(double rgb) {
+        this.r = rgb;
+        this.g = rgb;
+        this.b = rgb;
+        this.a = 1.0;
+    }
+
+    public Color(double rgb, double a) {
+        this.r = rgb;
+        this.g = rgb;
+        this.b = rgb;
+        this.a = a;
+    }
+
+    public Color(Color color) {
+        this.r = color.r;
+        this.g = color.g;
+        this.b = color.b;
+        this.a = color.a;
+    }
+
     public Color(String hex) {
         if (hex.startsWith("#") && hex.length() > 1) {
             hex = hex.substring(1);
@@ -58,11 +79,28 @@ public class Color {
         return new Color();
     }
 
+    public void multiply(double x) {
+        r *= x;
+        g *= x;
+        b *= x;
+        a *= x;
+    }
+
+    public Color multiplied(double x) {
+        final Color color = new Color(this);
+        color.multiply(x);
+        return color;
+    }
+
     public Vector3 toVector3() {
         return new Vector3(r, g, b);
     }
 
     public float[] toUniformFloatArray() {
         return new float[] {(float) r, (float) g, (float) b, (float) a};
+    }
+
+    public float[] toUniformFloatArrayNoAlpha() {
+        return new float[] {(float) r, (float) g, (float) b};
     }
 }
