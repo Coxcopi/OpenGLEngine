@@ -3,7 +3,7 @@ package de.coxcopi.util.math;
 /**
  * Extends Javas built-in Math class by a number of various helper functions.
  */
-public class Math {
+public class MathUtils {
 
     /**
      * Linearly interpolates between to values by a given factor.

@@ -263,9 +263,9 @@ public class Vector3 {
      * @param t The interpolation factor (usually between 0 and 1).
      */
     public void lerp(@NotNull Vector3 vector, double t) {
-        x = Math.lerp(x, vector.x, t);
-        y = Math.lerp(y, vector.y, t);
-        z = Math.lerp(z, vector.z, t);
+        x = MathUtils.lerp(x, vector.x, t);
+        y = MathUtils.lerp(y, vector.y, t);
+        z = MathUtils.lerp(z, vector.z, t);
     }
 
     /**
@@ -275,7 +275,7 @@ public class Vector3 {
      * @return The lerped vector.
      */
     public Vector3 lerped(@NotNull Vector3 vector, double t) {
-        return new Vector3(Math.lerp(x, vector.x, t), Math.lerp(y, vector.y, t), Math.lerp(z, vector.z, t));
+        return new Vector3(MathUtils.lerp(x, vector.x, t), MathUtils.lerp(y, vector.y, t), MathUtils.lerp(z, vector.z, t));
     }
 
     public static Vector3 midpointBetween(@NotNull Vector3 a, @NotNull Vector3 b) {

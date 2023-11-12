@@ -1,6 +1,8 @@
 package de.coxcopi.material.shader;
 
+import de.coxcopi.util.Color;
 import de.coxcopi.util.math.Matrix4;
+import de.coxcopi.util.math.Vector3;
 import org.lwjgl.opengl.GL20;
 
 public class Shader {
@@ -13,9 +15,14 @@ public class Shader {
     }
 
     public void setDefaultMatrixUniforms(Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix) {
-        GL20.glUniformMatrix4fv(1, false, modelMatrix.toUniformFloatArray());
-        GL20.glUniformMatrix4fv(2, false, viewMatrix.toUniformFloatArray());
-        GL20.glUniformMatrix4fv(3, false, projectionMatrix.toUniformFloatArray());
+        GL20.glUniformMatrix4fv(2, false, modelMatrix.toUniformFloatArray());
+        GL20.glUniformMatrix4fv(3, false, viewMatrix.toUniformFloatArray());
+        GL20.glUniformMatrix4fv(4, false, projectionMatrix.toUniformFloatArray());
+    }
+
+    public void setLightingUniforms(Color ambientLightColor, Vector3 viewPosition) {
+        setUniform("ambientColor", ambientLightColor, false);
+        setUniform("viewPosition", viewPosition);
     }
 
     public void setUniform(String uniform, double value) {
@@ -44,6 +51,26 @@ public class Shader {
             return;
         }
         GL20.glUniformMatrix4fv(location, transpose, value.toUniformFloatArray());
+    }
+
+    public void setUniform(String uniform, Vector3 value) {
+        final int location = getUniformLocation(uniform);
+        if (location == -1) {
+            return;
+        }
+        GL20.glUniform3fv(location, value.toFloatArray());
+    }
+
+    public void setUniform(String uniform, Color value, boolean useAlpha) {
+        final int location = getUniformLocation(uniform);
+        if (location == -1) {
+            return;
+        }
+        if (useAlpha) {
+            GL20.glUniform4fv(location, value.toUniformFloatArray());
+        } else {
+            GL20.glUniform3fv(location, value.toUniformFloatArrayNoAlpha());
+        }
     }
 
     private int getUniformLocation(String uniform) {

@@ -129,6 +129,14 @@ public class Matrix4 {
         return matrixMultiplied;
     }
 
+    public Vector3 multiply(@NotNull Vector3 vector) {
+        return new Vector3(
+                vector.dot(new Vector3(matrix[0][0], matrix[1][0], matrix[2][0])),
+                vector.dot(new Vector3(matrix[0][1], matrix[1][1], matrix[2][1])),
+                vector.dot(new Vector3(matrix[0][2], matrix[1][2], matrix[2][2]))
+        );
+    }
+
     /**
      * Constructs a 1-dimensional 16-element float array to be used in OpenGL shader uniforms.
      * <p>
@@ -158,14 +166,13 @@ public class Matrix4 {
      * @return A projection matrix.
      */
     public static Matrix4 perspective(double fovy, double aspect, double near, double far) {
-        fovy = Math.degToRad(fovy);
+        fovy = MathUtils.degToRad(fovy);
         double top = java.lang.Math.tan(fovy / 2.0) * near;
         double bottom = -top;
         double right = top * aspect;
         double left = -right;
         return perspective(left, right, top, bottom, near, far);
     }
-
 
     /**
      * Returns a projection matrix for perspective rendering.
@@ -188,29 +195,6 @@ public class Matrix4 {
         matrix.setValue(3, 2, -((2 * far * near) / (far - near)));
         return matrix;
     }
-
-    /*
-    public static Matrix4 lookAt(Vector3 position, Vector3 target, Vector3 up) {
-        Vector3 cameraDirection = position.translated(target.inverted()).normalized();
-        Vector3 cameraRight = up.cross(cameraDirection).normalized();
-        Vector3 cameraUp = cameraDirection.cross(cameraRight);
-        Matrix4 mat1 = new Matrix4();
-        mat1.setX(new Vector3(cameraRight.x, cameraUp.x, cameraDirection.x));
-        mat1.setY(new Vector3(cameraRight.y, cameraUp.y, cameraDirection.y));
-        mat1.setZ(new Vector3(cameraRight.z, cameraUp.z, cameraDirection.z));
-        mat1.setValue(3, 3, 1);
-        mat1.setOrigin(new Vector3(1));
-        Matrix4 mat2 = new Matrix4();
-        mat2.fillDiagonal(1);
-        mat2.setOrigin(position.inverted());
-        System.out.println(mat1);
-        System.out.println(mat2);
-        mat1.multiply(mat2);
-        System.out.println(mat1);
-        return mat1;
-    }
-
-     */
 
     /**
      * Creates a view (camera) matrix that looks at the given center position
