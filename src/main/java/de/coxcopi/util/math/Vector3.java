@@ -99,14 +99,16 @@ public class Vector3 {
      * Normalizes the vector so that its length is 1.
      */
     public void normalize() {
+        if (lengthSquared() == 0) return;
         multiply(1.0 / length());
     }
 
     /**
-     * Normalizes the vector so that the resulting vectors' length.
+     * Normalizes the vector so that the resulting vectors' length is 1.
      * @return The normalized vector.
      */
     public Vector3 normalized() {
+        if (lengthSquared() == 0) return new Vector3(this);
         return multiplied(1.0 / length());
     }
 
@@ -276,6 +278,10 @@ public class Vector3 {
      */
     public Vector3 lerped(@NotNull Vector3 vector, double t) {
         return new Vector3(MathUtils.lerp(x, vector.x, t), MathUtils.lerp(y, vector.y, t), MathUtils.lerp(z, vector.z, t));
+    }
+
+    public boolean isZero() {
+        return x == 0 && y == 0 && z == 0;
     }
 
     public static Vector3 midpointBetween(@NotNull Vector3 a, @NotNull Vector3 b) {
