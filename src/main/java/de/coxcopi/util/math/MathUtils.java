@@ -1,5 +1,7 @@
 package de.coxcopi.util.math;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Extends Javas built-in Math class by a number of various helper functions.
  */
@@ -38,4 +40,35 @@ public class MathUtils {
         return angle * (java.lang.Math.PI / 180.0);
     }
 
+    /**
+     * Converts from cartesian to spherical coordinates.
+     * @param position The cartesian position (x, y, z).
+     * @return The spherical position (r, theta, phi),
+     * where r describes the radius, theta describes the azimuth
+     * and phi describes the zenith.
+     */
+    public static Vector3 cartesianToSpherical(@NotNull Vector3 position) {
+        assert position.x != 0 && position.y != 0 && position.z != 0;
+        final double r = position.length();
+        final double theta = Math.atan(position.y / position.x);
+        final double phi = Math.atan(Math.sqrt(position.x * position.x + position.y * position.y) / position.z);
+        return new Vector3(r, theta, phi);
+    }
+
+    /**
+     * Converts from spherical to cartesian coordinates.
+     * @param position The spherical position (r, theta, phi),
+     * where r is the radius, theta is the azimuth and phi is the zenith.
+     * @return The cartesian position (x, y, z).
+     */
+    public static Vector3 sphericalToCartesian(@NotNull Vector3 position) {
+        final double r = position.x;
+        final double theta = position.y;
+        final double phi = position.z;
+        return new Vector3(
+                r * Math.sin(phi) * Math.cos(theta),
+                r * Math.sin(phi) * Math.sin(theta),
+                r * Math.cos(phi)
+        );
+    }
 }
