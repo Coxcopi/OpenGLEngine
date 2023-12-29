@@ -34,16 +34,17 @@ void main() {
     vec3 normal = normalize(NORMAL);
     //vec3 lightDir = normalize(tempLightPos - WORLD_POSITION);
 
-    vec3 lightDir = normalize(vec3(0, 5, -5));
+    vec3 lightDir = normalize(vec3(1.6, 5, 3));
 
     vec3 viewDir = normalize(view - WORLD_POSITION);
     vec3 reflectDir = reflect(-lightDir, normal);
 
     float specularStrength = 0.5;
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 16);
 
     //vec3 albedo = ((POSITION + vec3(1))) / 2; // temporary
     vec3 albedo = vec3(0.0, 0.5, 0.6);
+    //vec3 albedo = normal;
     vec3 diffuse = vec3(max(dot(normal, lightDir), 0.0)); // assuming light color is white, multiply with light color to get the diffuse color with a non-white light
     vec3 specular = vec3(specularStrength * spec); // same
 
