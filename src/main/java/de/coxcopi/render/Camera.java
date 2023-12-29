@@ -1,36 +1,38 @@
 package de.coxcopi.render;
 
+import de.coxcopi.util.math.MathUtils;
 import de.coxcopi.util.math.Matrix4;
 import de.coxcopi.util.math.Vector3;
 
 public class Camera {
-
-    private Vector3 position;
-    private Vector3 lookingAt;
     private double fov;
     private double aspectRatio;
     private double near = 0.1;
     private double far = 100.0;
     public Matrix4 viewMatrix;
+    public Matrix4 transform = Matrix4.transform();
     public Matrix4 projectionMatrix;
+    public Vector3 cameraFront = new Vector3(0, 0, -1);
+    private double pitch = 0;
+    private double yaw = 0;
 
-    public Camera(Vector3 position, Vector3 lookingAt, double fov, double aspectRatio) {
-        this.position = position;
-        this.lookingAt = lookingAt;
+    public Camera(double fov, double aspectRatio) {
         this.fov = fov;
         this.aspectRatio = aspectRatio;
         recalculateViewMatrix();
         recalculateProjectionMatrix();
     }
 
-    public void setLookingAt(Vector3 lookingAt) {
-        this.lookingAt = lookingAt;
-        recalculateViewMatrix();
+    public void rotate(double yaw, double pitch) {
+        this.yaw += yaw;
+        this.pitch += pitch;
+        recalculateCameraFront();
     }
 
-    public void setPosition(Vector3 position) {
-        this.position = position;
-        recalculateViewMatrix();
+    public void setRotations(double yaw, double pitch) {
+        this.yaw = yaw;
+        this.pitch = pitch;
+        recalculateCameraFront();
     }
 
     public void setFieldOfView(double fov) {
@@ -48,14 +50,6 @@ public class Camera {
         this.aspectRatio = aspectRatio;
     }
 
-    public Vector3 getPosition() {
-        return position;
-    }
-
-    public Vector3 getLookingAt() {
-        return lookingAt;
-    }
-
     public double getFov() {
         return fov;
     }
@@ -64,8 +58,24 @@ public class Camera {
         return aspectRatio;
     }
 
-    private void recalculateViewMatrix() {
-        viewMatrix = Matrix4.lookAt(position, lookingAt, new Vector3(0, 1, 0));
+    private void recalculateCameraFront() {
+        final Vector3 direction = new Vector3();
+        direction.x = Math.cos(yaw) * Math.cos(pitch);
+        direction.y = Math.sin(pitch);
+        direction.z = Math.sin(yaw) * Math.cos(pitch);
+        cameraFront = direction.normalized();
+        final Vector3 z = new Vector3(cameraFront);
+        final Vector3 yTemp = Vector3.UP();
+        final Vector3 x = z.cross(yTemp);
+        final Vector3 y = z.cross(x);
+        transform.setX(x);
+        transform.setY(y);
+        transform.setZ(z);
+    }
+
+    public void recalculateViewMatrix() {
+        //transform.multiply(transform.getOrigin().translated(new Vector3(0, 0, -1)))
+        viewMatrix = Matrix4.lookAtNew(transform.getOrigin(), transform.getOrigin().translated(cameraFront), new Vector3(0, 1, 0));
     }
 
     private void recalculateProjectionMatrix() {

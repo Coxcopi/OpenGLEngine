@@ -5,23 +5,11 @@ import de.coxcopi.engine.Model;
 import de.coxcopi.material.Material;
 import de.coxcopi.mesh.Mesh;
 import de.coxcopi.mesh.MeshBuilder;
+import de.coxcopi.mesh.MeshParser;
 import de.coxcopi.render.Renderer;
 import de.coxcopi.util.math.MathUtils;
 import de.coxcopi.util.math.Matrix4;
 import de.coxcopi.util.math.Vector3;
-import org.lwjgl.Version;
-import org.lwjgl.glfw.GLFWErrorCallback;
-import org.lwjgl.glfw.GLFWVidMode;
-import org.lwjgl.glfw.GLFWWindowSizeCallback;
-import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL30;
-import org.lwjgl.system.MemoryStack;
-
-import java.nio.IntBuffer;
-
-import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
-import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Test {
 
@@ -44,6 +32,15 @@ public class Test {
         Material material = new Material();
         //quad.material = material;
         cube.material = material;
+
+        Mesh mesh = MeshParser.parseOBJ("suzanne.obj");
+        System.out.println(mesh.getElementCount());
+
+        Mesh sphere = MeshBuilder.createPrimitiveSphere(8, 8, 1.0);
+
+        mesh.material = new Material();
+
+        mesh.transform.scale(2);
 
         //renderer.addToRenderQueue(quad);
         //renderer.addToRenderQueue(cube);

@@ -1,10 +1,12 @@
 package de.coxcopi.render;
 
+import de.coxcopi.input.Input;
 import de.coxcopi.mesh.Mesh;
 import de.coxcopi.util.Color;
 import de.coxcopi.util.math.MathUtils;
 import de.coxcopi.util.math.Vector3;
 import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWKeyCallbackI;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL;
@@ -23,10 +25,14 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Renderer {
 
+    private double y = 0;
+
     private final ArrayList<Mesh> renderQueue = new ArrayList<>();
     public long window;
-    public static final Camera camera = new Camera(new Vector3(0, 5, 5), new Vector3(0), 60.0, 800.0 / 600.0);
+    public static final Camera camera = new Camera(60.0, 800.0 / 600.0);
     public static final Environment environment = new Environment();
+    private double lastFrame = 0.0;
+    private double camSpeed = 2.5;
 
     /**
      * Initializes GLFW, OpenGL and the LWJGL context. Creates a new window.
@@ -50,13 +56,6 @@ public class Renderer {
         if (window == NULL) {
             throw new RuntimeException("Failed to create GLFW window");
         }
-
-        // Key press registering
-        glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
-            if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
-                glfwSetWindowShouldClose(window, true);
-            }
-        });
 
         // Get the thread stack and push a new frame
         try (MemoryStack stack = MemoryStack.stackPush()) {
@@ -88,6 +87,12 @@ public class Renderer {
                 onWindowResize(l, i, i1);
             }
         });
+        // Set key press callback
+        glfwSetKeyCallback(window, Input::processKeyCallback);
+        // Set mouse position callback
+        glfwSetCursorPosCallback(window, Input::processCursorPosCallback);
+
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
         // This line is critical for LWJGL's interoperation with GLFW's
         // OpenGL context, or any context that is managed externally.
@@ -103,6 +108,7 @@ public class Renderer {
 
     private void setParams() {
         glEnable(GL_DEPTH_TEST);
+        //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }
 
     public void addToRenderQueue(Mesh mesh) {
@@ -121,6 +127,43 @@ public class Renderer {
     }
 
     public void renderTick() {
+
+        double currentFrame = glfwGetTime();
+        double deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+
+        double mouseSensitivity = 0.1;
+
+        Vector3 vel = new Vector3();
+        if (Input.isKeyPressed(GLFW_KEY_W)) {
+            vel.translate(camera.transform.getZ());
+        }
+        if (Input.isKeyPressed(GLFW_KEY_S)) {
+            vel.translate(camera.transform.getZ().inverted());
+        }
+        if (Input.isKeyPressed(GLFW_KEY_A)) {
+            vel.translate(camera.transform.getX());
+        }
+        if (Input.isKeyPressed(GLFW_KEY_D)) {
+            vel.translate(camera.transform.getX().inverted());
+        }
+        if (Input.isKeyPressed(GLFW_KEY_LEFT_SHIFT)) {
+            camSpeed += 0.1;
+        }
+        if (Input.isKeyPressed(GLFW_KEY_LEFT_CONTROL)) {
+            camSpeed -= 0.1;
+        }
+        camSpeed = MathUtils.clamp(camSpeed, 0.0, 30.0);
+        vel = vel.normalized().multiplied(camSpeed * deltaTime);
+
+        double mX = Input.getMouseDeltaX() * mouseSensitivity * deltaTime;
+        double mY = Input.getMouseDeltaY() * mouseSensitivity * deltaTime;
+
+        camera.rotate(-mX, -mY);
+
+        camera.transform.translate(vel);
+        camera.recalculateViewMatrix();
+
         glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         final Color bg = environment.getBackgroundColor();
         glClearColor((float) bg.r, (float) bg.g, (float) bg.b, 1f);
@@ -129,21 +172,14 @@ public class Renderer {
             if (mesh == null || !mesh.visible) {
                 continue;
             }
-            //mesh.transform.rotateX(MathUtils.degToRad(0.5));
-            mesh.transform.rotateY(MathUtils.degToRad(0.8));
-            //mesh.transform.rotateZ(MathUtils.degToRad(-1));
-
-            double r = 6;
-            double camX = java.lang.Math.sin(glfwGetTime()) * r;
-            double camZ = java.lang.Math.cos(glfwGetTime()) * r;
-
-            //camera.viewMatrix = Matrix4.lookAt(new Vector3(camX, 5, camZ), new Vector3(0), new Vector3(0, 1, 0));
 
             mesh.render();
             GL20.glDrawElements(GL_TRIANGLES, mesh.getElementCount(), GL20.GL_UNSIGNED_INT, 0);
 
         }
+        //System.out.println(Math.round(1.0 / deltaTime));
         glfwSwapBuffers(window);
+        Input.update();
         glfwPollEvents();
     }
 
