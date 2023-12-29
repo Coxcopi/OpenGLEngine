@@ -6,9 +6,6 @@ import de.coxcopi.material.Material;
 import de.coxcopi.mesh.Mesh;
 import de.coxcopi.mesh.MeshBuilder;
 import de.coxcopi.mesh.MeshParser;
-import de.coxcopi.render.Renderer;
-import de.coxcopi.util.math.MathUtils;
-import de.coxcopi.util.math.Matrix4;
 import de.coxcopi.util.math.Vector3;
 
 public class Test {

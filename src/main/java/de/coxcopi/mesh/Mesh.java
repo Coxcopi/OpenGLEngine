@@ -1,7 +1,7 @@
 package de.coxcopi.mesh;
 
-import de.coxcopi.render.Renderer;
 import de.coxcopi.material.Material;
+import de.coxcopi.render.Renderer;
 import de.coxcopi.util.math.Matrix4;
 import org.lwjgl.opengl.GL30;
 

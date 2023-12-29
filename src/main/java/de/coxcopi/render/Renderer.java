@@ -6,7 +6,6 @@ import de.coxcopi.util.Color;
 import de.coxcopi.util.math.MathUtils;
 import de.coxcopi.util.math.Vector3;
 import org.lwjgl.glfw.GLFWErrorCallback;
-import org.lwjgl.glfw.GLFWKeyCallbackI;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL;

@@ -1,6 +1,5 @@
 package de.coxcopi.render;
 
-import de.coxcopi.util.math.MathUtils;
 import de.coxcopi.util.math.Matrix4;
 import de.coxcopi.util.math.Vector3;
 

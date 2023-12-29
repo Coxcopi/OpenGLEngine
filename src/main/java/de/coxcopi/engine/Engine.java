@@ -1,14 +1,11 @@
 package de.coxcopi.engine;
 
-import de.coxcopi.mesh.Mesh;
-import de.coxcopi.mesh.MeshParser;
 import de.coxcopi.render.Renderer;
 import org.lwjgl.Version;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
-import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 
 public class Engine {
     public static Renderer renderer = new Renderer();

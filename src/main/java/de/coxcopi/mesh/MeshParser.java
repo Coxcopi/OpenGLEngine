@@ -1,11 +1,9 @@
 package de.coxcopi.mesh;
 
-import de.coxcopi.material.shader.ShaderParser;
 import de.coxcopi.util.math.Vector3;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -14,7 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class MeshParser {

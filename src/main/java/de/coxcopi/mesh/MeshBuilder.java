@@ -3,15 +3,9 @@ package de.coxcopi.mesh;
 import de.coxcopi.mesh.buffer.IndexBuffer;
 import de.coxcopi.mesh.buffer.VertexBuffer;
 import de.coxcopi.util.math.Vector3;
-import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
-
-import java.nio.FloatBuffer;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class MeshBuilder {
 
