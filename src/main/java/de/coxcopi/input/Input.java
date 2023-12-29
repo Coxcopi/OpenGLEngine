@@ -10,6 +10,11 @@ public class Input {
     private static final ArrayList<Integer> pressed = new ArrayList<>();
     private static final ArrayList<Integer> released = new ArrayList<>();
 
+    private static double cursorPosLastX = 0;
+    private static double cursorPosLastY = 0;
+    public static double mouseDeltaX = 0;
+    public static double mouseDeltaY = 0;
+
     public static void processKeyCallback(long window, int key, int scancode, int action, int mods) {
         switch (action) {
             case GLFW_PRESS:
@@ -25,10 +30,27 @@ public class Input {
         }
     }
 
+    public static void processCursorPosCallback(long window, double x, double y) {
+        mouseDeltaX = x - cursorPosLastX;
+        mouseDeltaY = y - cursorPosLastY;
+        cursorPosLastX = x;
+        cursorPosLastY = y;
+    }
+
     public static void update() {
+        mouseDeltaX = 0;
+        mouseDeltaY = 0;
         pressed.addAll(press);
         press.clear();
         released.clear();
+    }
+
+    public static double getMouseDeltaX() {
+        return mouseDeltaX;
+    }
+
+    public static double getMouseDeltaY() {
+        return mouseDeltaY;
     }
 
     public static boolean isKeyPressed(int key) {
