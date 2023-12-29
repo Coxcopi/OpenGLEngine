@@ -226,6 +226,35 @@ public class Matrix4 {
         return matrix;
     }
 
+    public static Matrix4 lookAtNew(@NotNull Vector3 position, @NotNull Vector3 target, @NotNull Vector3 up) {
+        Vector3 direction = position.translated(target.inverted()).inverted().normalized();
+        Vector3 right = up.cross(direction).normalized();
+        Vector3 relativeUp = direction.cross(right);
+
+        Matrix4 matrix = new Matrix4();
+        matrix.fill(0);
+        matrix.setValue(0, 0, right.x);
+        matrix.setValue(1, 0, right.y);
+        matrix.setValue(2, 0, right.z);
+        matrix.setValue(0, 1, relativeUp.x);
+        matrix.setValue(1, 1, relativeUp.y);
+        matrix.setValue(2, 1, relativeUp.z);
+        matrix.setValue(0, 2, -direction.x);
+        matrix.setValue(1, 2, -direction.y);
+        matrix.setValue(2, 2, -direction.z);
+        matrix.setValue(3, 3, 1.0);
+
+        Matrix4 matrix2 = new Matrix4();
+        matrix2.fillDiagonal(1.0);
+        matrix2.setValue(3, 0, -position.x);
+        matrix2.setValue(3, 1, -position.y);
+        matrix2.setValue(3, 2, -position.z);
+
+        matrix.multiply(matrix2);
+
+        return matrix;
+    }
+
     /**
      * Creates a transform matrix for translation, rotation and scaling.
      * Default scale is (1, 1, 1) and default translation is (0, 0, 0);
@@ -326,6 +355,56 @@ public class Matrix4 {
         return matrix;
     }
 
+    public void setX(@NotNull Vector3 xVector) {
+        matrix[0][0] = xVector.x;
+        matrix[0][1] = xVector.y;
+        matrix[0][2] = xVector.z;
+    }
+    public void setY(@NotNull Vector3 yVector) {
+        matrix[1][0] = yVector.x;
+        matrix[1][1] = yVector.y;
+        matrix[1][2] = yVector.z;
+    }
+    public void setZ(@NotNull Vector3 zVector) {
+        matrix[2][0] = zVector.x;
+        matrix[2][1] = zVector.y;
+        matrix[2][2] = zVector.z;
+    }
+
+    public void setOrigin(@NotNull Vector3 origin) {
+        matrix[3][0] = origin.x;
+        matrix[3][1] = origin.y;
+        matrix[3][2] = origin.z;
+    }
+
+    public Vector3 getX() {
+        return new Vector3(
+                matrix[0][0],
+                matrix[0][1],
+                matrix[0][2]
+        );
+    }
+
+    public Vector3 getY() {
+        return new Vector3(
+                matrix[1][0],
+                matrix[1][1],
+                matrix[1][2]
+        );
+    }
+
+    public Vector3 getZ() {
+        return new Vector3(
+                matrix[2][0],
+                matrix[2][1],
+                matrix[2][2]
+        );
+    }
+
+    public Vector3 getOrigin() {
+        return new Vector3(matrix[3][0], matrix[3][1], matrix[3][2]);
+    }
+
     /**
      * Returns the matrix value at the given x and y coordinates.
      * Throws an error if either ix or iy is out of bounds.
@@ -356,64 +435,23 @@ public class Matrix4 {
         matrix[ix][iy] = value;
     }
 
-    /**
-     * Returns the first column of the matrix as a Vector3 (ignoring the 4th value).
-     * For transformation matrices, this is the x direction.
-     * @return The column as a Vector3.
-     */
-    public Vector3 getX() {
-        return new Vector3(matrix[0][0], matrix[0][1], matrix[0][2]);
+    public void transpose() {
+        Matrix4 matrix4 = this.transposed();
+        for (int x = 0; x < 4; x++) {
+            for (int y = 0; y < 4; y++) {
+                this.matrix[x][y] = matrix4.getValue(x, y);
+            }
+        }
     }
 
-    /**
-     * Returns the second column of the matrix as a Vector3 (ignoring the 4th value).
-     * For transformation matrices, this is the y direction.
-     * @return The column as a Vector3.
-     */
-    public Vector3 getY() {
-        return new Vector3(matrix[1][0], matrix[1][1], matrix[1][2]);
-    }
-
-    /**
-     * Returns the third column of the matrix as a Vector3 (ignoring the 4th value).
-     * For transformation matrices, this is the z direction.
-     * @return The column as a Vector3.
-     */
-    public Vector3 getZ() {
-        return new Vector3(matrix[2][0], matrix[2][1], matrix[2][2]);
-    }
-
-    /**
-     * Returns the fourth column of the matrix as a Vector3 (ignoring the 4th value).
-     * For transformation matrices, this is origin (or position/translation).
-     * @return The column as a Vector3.
-     */
-    public Vector3 getOrigin() {
-        return new Vector3(matrix[3][0], matrix[3][1], matrix[3][2]);
-    }
-
-    public void setX(@NotNull Vector3 vector) {
-        matrix[0][0] = vector.x;
-        matrix[0][1] = vector.y;
-        matrix[0][2] = vector.z;
-    }
-
-    public void setY(@NotNull Vector3 vector) {
-        matrix[1][0] = vector.x;
-        matrix[1][1] = vector.y;
-        matrix[1][2] = vector.z;
-    }
-
-    public void setZ(@NotNull Vector3 vector) {
-        matrix[2][0] = vector.x;
-        matrix[2][1] = vector.y;
-        matrix[2][2] = vector.z;
-    }
-
-    public void setOrigin(@NotNull Vector3 vector) {
-        matrix[3][0] = vector.x;
-        matrix[3][1] = vector.y;
-        matrix[3][2] = vector.z;
+    public Matrix4 transposed() {
+        Matrix4 matrix = new Matrix4();
+        for (int x = 0; x < 4; x++) {
+            for (int y = 0; y < 4; y++) {
+                matrix.setValue(x, y, this.matrix[y][x]);
+            }
+        }
+        return matrix;
     }
 
     /**

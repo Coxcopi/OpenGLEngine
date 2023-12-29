@@ -18,8 +18,23 @@ public class MathUtils {
         return (a + (b - a) * t);
     }
 
+    /**
+     * Maps the given value from a given range in to a given range out.
+     * For example, map(x, 0, 1, -1, 1) maps the value x from a range between 0 and 1
+     * to a range between -1 and 1.
+     * @param x The value to map.
+     * @param inMin The minimum value of the input range.
+     * @param inMax The maximum value of the input range.
+     * @param outMin The minimum value of the output range.
+     * @param outMax The maximum value of the output range.
+     * @return The mapped value.
+     */
     public static double map(double x, double inMin, double inMax, double outMin, double outMax) {
         return (x - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+    }
+
+    public static double clamp(double x, double min, double max) {
+        return Math.min(max, Math.max(x, min));
     }
 
     /**

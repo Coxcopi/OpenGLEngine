@@ -54,6 +54,54 @@ public class Vector3 {
     }
 
     /**
+     * Global right vector (positive x).
+     * @return The right vector (1, 0, 0).
+     */
+    public static Vector3 RIGHT() {
+        return new Vector3(1, 0, 0);
+    }
+
+    /**
+     * Global left vector (negative x).
+     * @return The right vector (-1, 0, 0).
+     */
+    public static Vector3 LEFT() {
+        return new Vector3(-1, 0, 0);
+    }
+
+    /**
+     * Global up vector (positive y).
+     * @return The up vector (0, 1, 0).
+     */
+    public static Vector3 UP() {
+        return new Vector3(0, 1, 0);
+    }
+
+    /**
+     * Global down vector (negative y).
+     * @return The up vector (0, -1, 0).
+     */
+    public static Vector3 DOWN() {
+        return new Vector3(0, -1, 0);
+    }
+
+    /**
+     * Global front vector (negative z).
+     * @return The front vector (0, 0, -1).
+     */
+    public static Vector3 FRONT() {
+        return new Vector3(0, 0, -1);
+    }
+
+    /**
+     * Global back vector (positive z).
+     * @return The back vector (0, 0, 1).
+     */
+    public static Vector3 BACK() {
+        return new Vector3(0, 0, 1);
+    }
+
+    /**
      * Constructs a new vector;
      * @param a The vectors x, y and z value.
      */
