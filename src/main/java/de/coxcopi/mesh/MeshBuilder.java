@@ -18,8 +18,8 @@ public class MeshBuilder {
     public static Mesh createMesh(float[] vertices, int[] indices) {
         int vao = generateVertexArrayObject();
         VertexBuffer vb = new VertexBuffer(vertices);
-        GL30.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, 6 * 4, 0);
-        GL30.glVertexAttribPointer(1, 3, GL11.GL_FLOAT, false, 6 * 4, 3 * 4);
+        GL30.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, 6 * 4, 0);       // Vertex Positions
+        GL30.glVertexAttribPointer(1, 3, GL11.GL_FLOAT, false, 6 * 4, 3 * 4);   // Vertex Normals
         GL30.glEnableVertexAttribArray(0);
         GL30.glEnableVertexAttribArray(1);
         IndexBuffer ib = new IndexBuffer(indices);
