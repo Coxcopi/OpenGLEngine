@@ -9,6 +9,9 @@ public class Light {
     public double intensity = 1.0;
     public Color lightColor = new Color(1.0);
 
+    public Light() {
+    }
+
     public Light(Matrix4 transform, double intensity, Color lightColor) {
         this.transform = transform;
         this.intensity = intensity;
