@@ -1,5 +1,7 @@
 package de.coxcopi.material.shader;
 
+import de.coxcopi.material.Material;
+import de.coxcopi.render.Environment;
 import de.coxcopi.util.Color;
 import de.coxcopi.util.math.Matrix4;
 import de.coxcopi.util.math.Vector3;
@@ -20,8 +22,21 @@ public class Shader {
         GL20.glUniformMatrix4fv(4, false, projectionMatrix.toUniformFloatArray());
     }
 
+    /*
     public void setLightingUniforms(Color ambientLightColor, Vector3 viewPosition) {
         setUniform("ambientColor", ambientLightColor, false);
+        setUniform("viewPosition", viewPosition);
+    }
+     */
+
+    public void setLightingUniforms(Environment environment, Material material, Vector3 viewPosition) {
+        // TODO: Expand (?)
+        setUniform("environment.ambient", environment.getBackgroundColor(), false);
+        setUniform("material.ambient", material.ambient, false);
+        setUniform("material.diffuse", material.diffuse, false);
+        setUniform("material.specular", material.specular, false);
+        setUniform("material.shininess", material.shininess);
+
         setUniform("viewPosition", viewPosition);
     }
 

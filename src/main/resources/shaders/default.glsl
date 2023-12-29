@@ -19,40 +19,47 @@ void main() {
 
 #shader fragment
 #version 430 core
+
+struct Environment {
+    vec3 ambient;
+};
+
+struct Material {
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+    float shininess;
+};
+
 out vec4 fragColor;
 in vec3 POSITION;
 in vec3 WORLD_POSITION;
 in vec3 NORMAL;
 
-uniform vec3 ambientColor;
+uniform Environment environment;
+uniform Material material;
+
 uniform vec3 viewPosition;
 
 void main() {
 
-    vec3 view = vec3(viewPosition.x, viewPosition.y, -viewPosition.z);
-    vec3 tempLightPos = vec3(0, 5, -5);
+    // ambient
+    vec3 ambient = material.ambient + environment.ambient;
+
+    vec3 tempLightPos = vec3(1.3, 4, 2.5);
+
+    // diffuse
     vec3 normal = normalize(NORMAL);
-    //vec3 lightDir = normalize(tempLightPos - WORLD_POSITION);
+    vec3 lightDir = normalize(tempLightPos - WORLD_POSITION);
+    float diff = max(dot(normal, lightDir), 0.0);
+    vec3 diffuse = diff * material.diffuse;
 
-    vec3 lightDir = normalize(vec3(1.6, 5, 3));
-
-    vec3 viewDir = normalize(view - WORLD_POSITION);
+    // specular
+    vec3 viewDir = normalize(viewPosition - WORLD_POSITION);
     vec3 reflectDir = reflect(-lightDir, normal);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+    vec3 specular = spec * material.specular;
 
-    float specularStrength = 0.5;
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 16);
-
-    //vec3 albedo = ((POSITION + vec3(1))) / 2; // temporary
-    vec3 albedo = vec3(0.0, 0.5, 0.6);
-    //vec3 albedo = normal;
-    vec3 diffuse = vec3(max(dot(normal, lightDir), 0.0)); // assuming light color is white, multiply with light color to get the diffuse color with a non-white light
-    vec3 specular = vec3(specularStrength * spec); // same
-
-    //fragColor = vec4(viewMatrix * vec4(0.0, 1.0, 0.0, 1.0));
-    //fragColor = vec4(1f);
-    //fragColor = vec4((vec3(position.x, position.y, position.z) + vec3(1)) / 2, 1f);
-
-    vec3 lightResult = (ambientColor + diffuse + specular) * albedo;
-
-    fragColor = vec4(lightResult, 1.0);
+    vec3 result = ambient + diffuse + specular;
+    fragColor = vec4(result, 1.0);
 }

@@ -33,7 +33,7 @@ public class Test {
         //quad.material = material;
         cube.material = material;
 
-        Mesh mesh = MeshParser.parseOBJ("suzanne.obj");
+        Mesh mesh = MeshParser.parseOBJ("suzanne_smooth.obj");
         System.out.println(mesh.getElementCount());
 
         Mesh sphere = MeshBuilder.createPrimitiveSphere(8, 8, 1.0);
@@ -48,6 +48,6 @@ public class Test {
         //Mesh sphere = MeshBuilder.createPrimitiveSphere(12, 6, 1);
         //sphere.transform.scale(1.3);
         //Mesh otherSphere = MeshBuilder.createPrimitiveOtherSphere(0, 1);
-        Engine.instance(new Model(cube));
+        Engine.instance(new Model(mesh));
     }
 }

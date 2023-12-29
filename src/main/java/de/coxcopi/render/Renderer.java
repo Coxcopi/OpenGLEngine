@@ -173,9 +173,10 @@ public class Renderer {
                 continue;
             }
 
+            mesh.transform.rotateY(0.01);
+
             mesh.render();
             GL20.glDrawElements(GL_TRIANGLES, mesh.getElementCount(), GL20.GL_UNSIGNED_INT, 0);
-
         }
         //System.out.println(Math.round(1.0 / deltaTime));
         glfwSwapBuffers(window);

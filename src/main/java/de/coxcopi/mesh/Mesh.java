@@ -59,7 +59,8 @@ public class Mesh {
         }
         material.bind();
         material.shader.setDefaultMatrixUniforms(transform, Renderer.camera.viewMatrix, Renderer.camera.projectionMatrix);
-        material.shader.setLightingUniforms(Renderer.environment.getBackgroundColor(), Renderer.camera.transform.getOrigin());
+        //material.shader.setLightingUniforms(Renderer.environment.getBackgroundColor(), Renderer.camera.transform.getOrigin());
+        material.shader.setLightingUniforms(Renderer.environment, material, Renderer.camera.transform.getOrigin());
         GL30.glBindVertexArray(vao);
     }
 }
